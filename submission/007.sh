@@ -6,9 +6,10 @@ for txid in $txids; do
     vout_count=$(echo $raw_tx | jq '.vout | length')
     for ((i=0; i<vout_count; i++)); do
         scriptPubKey=$(echo $raw_tx | jq -r ".vout[$i].scriptPubKey")
+        # echo $scriptPubKey_hex
         decoded_script=$(bitcoin-cli decodescript "$scriptPubKey_hex")
-        address=$(echo $decoded_script | jq -r '.segwit.address')
-        echo $address
+        address=$(echo $decoded_script | jq -r '.addresses[0]')
+        echo $address        
         exit 0
     done
 done
